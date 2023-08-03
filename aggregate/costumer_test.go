@@ -7,13 +7,15 @@ import (
 	"github.com/dkhaii/cofeeshop-be/aggregate"
 )
 
-func TestCostumer_NewCostumer(t *testing.T) {
+func TestCostumer_NewCustomer(t *testing.T) {
+	// making the test case
 	type testCase struct {
 		test string
 		name string
 		expectedErr error
 	}
 
+	// test cases that will be performed
 	testCases := []testCase{
 		{
 			test: "Empty Name Validation",
@@ -27,8 +29,9 @@ func TestCostumer_NewCostumer(t *testing.T) {
 		},
 	}
 
+	// looping the test cases, and perform the test
 	for _, tc := range testCases{
-		t.Run(tc.name, func(t *testing.T) {
+		t.Run(tc.test, func(t *testing.T) {
 			_, err := aggregate.NewCustomer(tc.name)
 
 			if !errors.Is(err, tc.expectedErr) {
