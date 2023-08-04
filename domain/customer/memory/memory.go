@@ -9,18 +9,20 @@ import (
 	"github.com/google/uuid"
 )
 
-type MemoryRepository struct {
+type MemoryCustomerRepository struct {
 	customers map[uuid.UUID]aggregate.Customer
 	sync.Mutex
 }
 
-func New() *MemoryRepository {
-	return &MemoryRepository{
+
+// factory
+func New() *MemoryCustomerRepository {
+	return &MemoryCustomerRepository{
 		customers: make(map[uuid.UUID]aggregate.Customer),
 	}
 }
 
-func (mry *MemoryRepository) Get(id uuid.UUID) (aggregate.Customer, error) {
+func (mry *MemoryCustomerRepository) Get(id uuid.UUID) (aggregate.Customer, error) {
 	if customer, isExist := mry.customers[id]; isExist {
 		return customer, nil
 	}
@@ -28,34 +30,34 @@ func (mry *MemoryRepository) Get(id uuid.UUID) (aggregate.Customer, error) {
 	return aggregate.Customer{}, customer.ErrCustomerNotFound
 }
 
-func (mry *MemoryRepository) Add(c aggregate.Customer) error {
+func (mry *MemoryCustomerRepository) Add(cust aggregate.Customer) error {
 	if mry.customers == nil {
 		mry.Lock()
+		defer mry.Unlock()
+		
 		mry.customers = make(map[uuid.UUID]aggregate.Customer)
-		mry.Unlock()
 	}
 
 	// check if customer is already in repo
-	if _, isExist := mry.customers[c.GetID()]; isExist {
+	if _, isExist := mry.customers[cust.GetID()]; isExist {
 		return fmt.Errorf("customer already exist: %w", customer.ErrFailedToAddCustomer)
 	}
 
-	mry.Lock()
-	mry.customers[c.GetID()] = c
-	mry.Unlock()
+	mry.customers[cust.GetID()] = cust
 
 	return nil
 }
 
-func (mry *MemoryRepository) Update(c aggregate.Customer) error {
+func (mry *MemoryCustomerRepository) Update(cust aggregate.Customer) error {
 	// check if customer doesnt exist in repo
-	if _, isExist := mry.customers[c.GetID()]; !isExist {
-		return fmt.Errorf("customer doesnt exist: %w", customer.ErrFailedToUpdateCustomer)
+	if _, isExist := mry.customers[cust.GetID()]; !isExist {
+		return fmt.Errorf("customer doesnt exist: %w", customer.ErrCustomerNotFound)
 	}
 
 	mry.Lock()
-	mry.customers[c.GetID()] = c
-	mry.Unlock()
+	defer mry.Unlock()
+	
+	mry.customers[cust.GetID()] = cust
 
 	return nil
 }

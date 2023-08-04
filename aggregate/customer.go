@@ -2,6 +2,7 @@ package aggregate
 
 import (
 	"errors"
+	"time"
 
 	"github.com/dkhaii/cofeeshop-be/entity"
 	"github.com/dkhaii/cofeeshop-be/valueobject"
@@ -26,8 +27,10 @@ func NewCustomer(name string) (Customer, error) {
 
 	// creating new person
 	person := &entity.Person{
-		ID:   uuid.New(),
-		Name: name,
+		ID:        uuid.New(),
+		Name:      name,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
 	// the new person as costumer
@@ -39,24 +42,16 @@ func NewCustomer(name string) (Customer, error) {
 }
 
 // setter and getter
-func (c *Customer) GetID() uuid.UUID {
-	return c.person.ID
-}
-
-func (c *Customer) SetID(id uuid.UUID) {
-	if c.person == nil {
-		c.person = &entity.Person{}
-	}
-
-	c.person.ID = id
-}
-
 func (c *Customer) SetName(name string) {
 	if c.person == nil {
 		c.person = &entity.Person{}
 	}
 
 	c.person.Name = name
+}
+
+func (c *Customer) GetID() uuid.UUID {
+	return c.person.ID
 }
 
 func (c *Customer) GetName() string {

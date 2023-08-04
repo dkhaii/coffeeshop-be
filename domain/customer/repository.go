@@ -10,11 +10,10 @@ import (
 var (
 	ErrCustomerNotFound       = errors.New("the customer was not found in the repository")
 	ErrFailedToAddCustomer    = errors.New("failed to add new customer")
-	ErrFailedToUpdateCustomer = errors.New("failed to update the customer")
 )
 
 type CostumerRepository interface {
-	Get(uuid.UUID) (aggregate.Customer, error)
-	Add(aggregate.Customer) error
-	Update(aggregate.Customer) error
+	Get(id uuid.UUID) (aggregate.Customer, error)
+	Add(cust aggregate.Customer) error
+	Update(cust aggregate.Customer) error
 }
