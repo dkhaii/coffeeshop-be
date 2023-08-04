@@ -3,7 +3,6 @@ package product
 import (
 	"errors"
 
-	"github.com/dkhaii/cofeeshop-be/aggregate"
 	"github.com/google/uuid"
 )
 
@@ -14,10 +13,10 @@ var (
 	ErrFailedToDeleteProduct = errors.New("failed to delete product")
 )
 
-type ProductRepository interface {
-	GetAll() ([]aggregate.Product, error)
-	GetByID(id uuid.UUID) (aggregate.Product, error)
-	Add(prod aggregate.Product) error
-	Update(prod aggregate.Product) error
+type Repository interface {
+	GetAll() ([]Product, error)
+	GetByID(id uuid.UUID) (Product, error)
+	Add(prod Product) error
+	Update(prod Product) error
 	Delete(id uuid.UUID) error
 }

@@ -1,10 +1,8 @@
-package aggregate_test
+package customer
 
 import (
 	"errors"
 	"testing"
-
-	"github.com/dkhaii/cofeeshop-be/aggregate"
 )
 
 func TestCostumer_NewCustomer(t *testing.T) {
@@ -20,7 +18,7 @@ func TestCostumer_NewCustomer(t *testing.T) {
 		{
 			test:        "Empty Name Validation",
 			name:        "",
-			expectedErr: aggregate.ErrInvalidPerson,
+			expectedErr: ErrInvalidPerson,
 		},
 		{
 			test:        "Valid Name",
@@ -32,7 +30,7 @@ func TestCostumer_NewCustomer(t *testing.T) {
 	// looping the test cases, and perform the test
 	for _, tc := range testCases {
 		t.Run(tc.test, func(t *testing.T) {
-			_, err := aggregate.NewCustomer(tc.name)
+			_, err := NewCustomer(tc.name)
 
 			if !errors.Is(err, tc.expectedErr) {
 				t.Errorf("expected error %v, got %v", tc.expectedErr, err)

@@ -1,11 +1,10 @@
-package aggregate
+package customer
 
 import (
 	"errors"
 	"time"
 
 	"github.com/dkhaii/cofeeshop-be/entity"
-	"github.com/dkhaii/cofeeshop-be/valueobject"
 	"github.com/google/uuid"
 )
 
@@ -15,7 +14,7 @@ var ErrInvalidPerson = errors.New("a customer must have a valid name")
 type Customer struct {
 	person       *entity.Person
 	product      []*entity.Item
-	transactions []*valueobject.Transaction
+	transactions []*entity.Transaction
 }
 
 // factory to create a new costumer aggregate
@@ -37,7 +36,7 @@ func NewCustomer(name string) (Customer, error) {
 	return Customer{
 		person:       person,
 		product:      make([]*entity.Item, 0),
-		transactions: make([]*valueobject.Transaction, 0),
+		transactions: make([]*entity.Transaction, 0),
 	}, nil
 }
 

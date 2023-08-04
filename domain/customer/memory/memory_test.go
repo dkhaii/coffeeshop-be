@@ -4,8 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/dkhaii/cofeeshop-be/aggregate"
-	costumer "github.com/dkhaii/cofeeshop-be/domain/customer"
+	"github.com/dkhaii/cofeeshop-be/domain/customer"
 	"github.com/google/uuid"
 )
 
@@ -16,7 +15,7 @@ func TestMemory_GetCustomer(t *testing.T) {
 		expectedErr error
 	}
 
-	cust, err := aggregate.NewCustomer("Mordekhai")
+	cust, err := customer.NewCustomer("Mordekhai")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -24,7 +23,7 @@ func TestMemory_GetCustomer(t *testing.T) {
 	id := cust.GetID()
 
 	repo := MemoryCustomerRepository{
-		customers: map[uuid.UUID]aggregate.Customer{
+		customers: map[uuid.UUID]customer.Customer{
 			id: cust,
 		},
 	}
@@ -33,7 +32,7 @@ func TestMemory_GetCustomer(t *testing.T) {
 		{
 			test:        "no customer id",
 			id:          uuid.MustParse("f47ac10b-58cc-0372-8567-0e02b2c3d479"),
-			expectedErr: costumer.ErrCustomerNotFound,
+			expectedErr: customer.ErrCustomerNotFound,
 		},
 		{
 			test:        "customer id exist",
