@@ -64,7 +64,7 @@ func WithMemoryProductRepository(products []product.Product) OrderConfiguration 
 
 func (os *OrderService) CreateOrder(customerID uuid.UUID, productsIDs []uuid.UUID) (float64, error) {
 	// fetch the customer
-	cust, err := os.customers.Get(customerID)
+	cust, err := os.customers.GetByID(customerID)
 	if err != nil {
 		return 0, err
 	}

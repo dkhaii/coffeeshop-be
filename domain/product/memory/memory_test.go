@@ -4,38 +4,38 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/dkhaii/cofeeshop-be/domain/customer"
+	"github.com/dkhaii/cofeeshop-be/domain/product"
 	"github.com/google/uuid"
 )
 
-func TestMemory_GetCustomer(t *testing.T) {
+func TestMemory_GetProduct(t *testing.T) {
 	type testCase struct {
 		test        string
 		id          uuid.UUID
 		expectedErr error
 	}
 
-	cust, err := customer.NewCustomer("Mordekhai")
+	esTehJumbo, err := product.NewProduct("Es Teh Jumbo", 9.000, 2)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	id := cust.GetID()
+	id := esTehJumbo.GetID()
 
 	repo := MemoryRepository{
-		customers: map[uuid.UUID]customer.Customer{
-			id: cust,
+		products: map[uuid.UUID]product.Product{
+			id: esTehJumbo,
 		},
 	}
 
 	testCases := []testCase{
 		{
-			test:        "no customer id",
+			test:        "no product id",
 			id:          uuid.MustParse("f47ac10b-58cc-0372-8567-0e02b2c3d479"),
-			expectedErr: customer.ErrCustomerNotFound,
+			expectedErr: product.ErrProductNotFound,
 		},
 		{
-			test:        "customer id exist",
+			test:        "product id exist",
 			id:          id,
 			expectedErr: nil,
 		},

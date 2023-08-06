@@ -8,18 +8,18 @@ import (
 	"github.com/google/uuid"
 )
 
-type MemoryProductRepository struct {
+type MemoryRepository struct {
 	products map[uuid.UUID]product.Product
 	sync.Mutex
 }
 
-func New() *MemoryProductRepository {
-	return &MemoryProductRepository{
+func New() *MemoryRepository {
+	return &MemoryRepository{
 		products: make(map[uuid.UUID]product.Product),
 	}
 }
 
-func (mry *MemoryProductRepository) GetAll() ([]product.Product, error) {
+func (mry *MemoryRepository) GetAll() ([]product.Product, error) {
 	var products []product.Product
 
 	// convert the map into a slice
@@ -30,7 +30,7 @@ func (mry *MemoryProductRepository) GetAll() ([]product.Product, error) {
 	return products, nil
 }
 
-func (mry *MemoryProductRepository) GetByID(id uuid.UUID) (product.Product, error) {
+func (mry *MemoryRepository) GetByID(id uuid.UUID) (product.Product, error) {
 	if product, isExist := mry.products[id]; isExist {
 		return product, nil
 	}
@@ -38,7 +38,7 @@ func (mry *MemoryProductRepository) GetByID(id uuid.UUID) (product.Product, erro
 	return product.Product{}, product.ErrProductNotFound
 }
 
-func (mry *MemoryProductRepository) Add(prod product.Product) error {
+func (mry *MemoryRepository) Add(prod product.Product) error {
 	mry.Lock()
 	defer mry.Unlock()
 
@@ -51,7 +51,7 @@ func (mry *MemoryProductRepository) Add(prod product.Product) error {
 	return nil
 }
 
-func (mry *MemoryProductRepository) Update(prod product.Product) error {
+func (mry *MemoryRepository) Update(prod product.Product) error {
 	mry.Lock()
 	defer mry.Unlock()
 
@@ -64,7 +64,7 @@ func (mry *MemoryProductRepository) Update(prod product.Product) error {
 	return nil
 }
 
-func (mry *MemoryProductRepository) Delete(id uuid.UUID) error {
+func (mry *MemoryRepository) Delete(id uuid.UUID) error {
 	mry.Lock()
 	defer mry.Unlock()
 

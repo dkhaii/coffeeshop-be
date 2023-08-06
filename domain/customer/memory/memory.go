@@ -8,19 +8,19 @@ import (
 	"github.com/google/uuid"
 )
 
-type MemoryCustomerRepository struct {
+type MemoryRepository struct {
 	customers map[uuid.UUID]customer.Customer
 	sync.Mutex
 }
 
 // factory
-func New() *MemoryCustomerRepository {
-	return &MemoryCustomerRepository{
+func New() *MemoryRepository {
+	return &MemoryRepository{
 		customers: make(map[uuid.UUID]customer.Customer),
 	}
 }
 
-func (mry *MemoryCustomerRepository) Get(id uuid.UUID) (customer.Customer, error) {
+func (mry *MemoryRepository) GetByID(id uuid.UUID) (customer.Customer, error) {
 	if customer, isExist := mry.customers[id]; isExist {
 		return customer, nil
 	}
@@ -28,7 +28,7 @@ func (mry *MemoryCustomerRepository) Get(id uuid.UUID) (customer.Customer, error
 	return customer.Customer{}, customer.ErrCustomerNotFound
 }
 
-func (mry *MemoryCustomerRepository) Add(cust customer.Customer) error {
+func (mry *MemoryRepository) Add(cust customer.Customer) error {
 	if mry.customers == nil {
 		mry.Lock()
 		defer mry.Unlock()
@@ -46,7 +46,7 @@ func (mry *MemoryCustomerRepository) Add(cust customer.Customer) error {
 	return nil
 }
 
-func (mry *MemoryCustomerRepository) Update(cust customer.Customer) error {
+func (mry *MemoryRepository) Update(cust customer.Customer) error {
 	// check if customer doesnt exist in repo
 	if _, isExist := mry.customers[cust.GetID()]; !isExist {
 		return fmt.Errorf("customer doesnt exist: %w", customer.ErrCustomerNotFound)

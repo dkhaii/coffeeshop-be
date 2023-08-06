@@ -12,7 +12,7 @@ var (
 )
 
 type Repository interface {
-	Get(id uuid.UUID) (Customer, error)
+	GetByID(id uuid.UUID) (Customer, error)
 	Add(cust Customer) error
 	Update(cust Customer) error
 }
